@@ -1,6 +1,321 @@
-<p class="codepen" data-height="300" data-default-tab="html,result" data-slug-hash="pgGYBe" data-pen-title="Daily UI #004: Calculator" data-user="supah" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
-  <span>See the Pen <a href="https://codepen.io/supah/pen/pgGYBe">
-  Daily UI #004: Calculator</a> by Fabio Ottaviani (<a href="https://codepen.io/supah">@supah</a>)
-  on <a href="https://codepen.io">CodePen</a>.</span>
-</p>
+<div class="codepen" data-height="300" data-default-tab="html,result" data-slug-hash="pgGYBe" data-pen-title="Daily UI #004: Calculator" data-user="supah"  data-prefill='{"title":"Daily UI #004: Calculator","description":"https://dailyui.co/ #004","tags":["dailyui","calculator","gradient","experiment","dribbble"],"scripts":["//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"],"stylesheets":["https://fonts.googleapis.com/css?family=Open+Sans"]}'>
+  <pre data-lang="html">&lt;!--
+
+Follow me on
+Dribbble: https://dribbble.com/supahfunk
+Twitter: https://twitter.com/supahfunk
+Codepen: https://codepen.io/supah/
+
+-->
+&lt;div class="calculator">
+  &lt;div class="screen">15x3&lt;/div>
+  &lt;div class="buttons">
+    &lt;div class="numbers">
+      &lt;button data-val="9">9&lt;/button>
+      &lt;button data-val="8">8&lt;/button>
+      &lt;button data-val="7">7&lt;/button>
+      &lt;button data-val="6">6&lt;/button>
+      &lt;button data-val="5">5&lt;/button>
+      &lt;button data-val="4">4&lt;/button>
+      &lt;button data-val="3">3&lt;/button>
+      &lt;button data-val="2">2&lt;/button>
+      &lt;button data-val="1">1&lt;/button>
+      &lt;button data-val="clear">C&lt;/button>
+      &lt;button data-val=".">.&lt;/button>
+      &lt;button data-val="0" href="0">0&lt;/button>
+    &lt;/div>
+    &lt;div class="operators">
+      &lt;button data-val="÷">÷&lt;/button>
+      &lt;button data-val="x">x&lt;/button>
+      &lt;button data-val="-">-&lt;/button>
+      &lt;button data-val="+">+&lt;/button>
+      &lt;button data-val="=">=&lt;/button>
+    &lt;/div>
+  &lt;/div>
+&lt;/div></pre>
+  <pre data-lang="scss" data-option-autoprefixer="true">/*--------------------
+Reset & body
+--------------------*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background: linear-gradient(180deg, #feead2, #fff8ee);
+  font-family: Open Sans;
+  font-size: 16px;
+  &:before {
+    content: '';
+    width: 800px;
+    height: 600px;
+    background: #f00;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+  }
+}
+
+
+/*--------------------
+Calculator
+--------------------*/
+.calculator {
+  width: 300px;
+  background: linear-gradient(135deg, #fcaf3b, #f25c2a);
+  box-shadow: 0 10px 28px #d8724a;
+  margin: 30px auto;
+  position: absolute;
+  overflow: hidden;
+  border-radius: 20px;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  transform: translate(-50%, -62%);
+}
+
+
+/*--------------------
+screen
+--------------------*/
+.screen {
+  background: #fff;
+  padding: 15px 28px;
+  height: 69px;
+  text-align: right;
+  font-size: 29px;
+  color: #4c455a;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 0 2px 3px #d8724a;
+  transition: color .6s ease-in-out;
+
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+}
+
+
+/*--------------------
+Buttons
+--------------------*/
+.buttons {
+
+  & button {
+    float: right;
+    border: none;
+    background: transparent;
+    color: #fff;
+    padding: 15px 10px;
+    outline: none;
+    text-shadow: 0 2px 1px rgba(0, 0, 0, 0.1);
+    border-radius: 14px;
+    focus: none!important;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);;
+    }
+
+    &:active, &.active {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 14px;
+    }
+
+  }
+
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+  & .numbers {
+    float: left;
+    width: 75%;
+    padding: 10px;
+
+    & button {
+      width: 33.3333%;
+      padding: 18px 10px;
+    }
+  }
+
+  & .operators {
+    float: right;
+    width: 25%;
+    padding: 16px 10px 10px;
+    background: rgba(0, 0, 0, 0.1);
+    min-height: 260px;
+
+    & button {
+      width: 100%;
+      padding: 11px 10px;
+      
+      &[data-val="x"] {
+        font-size: 13px;
+      }
+      
+      &[data-val="-"] {
+        font-size: 18px;
+      }
+
+      &[data-val="="] {
+        font-size: 16px;
+      }
+    }
+
+  }
+}
+
+
+
+
+</pre>
+  <pre data-lang="js">/*--------------------
+IT'S A SIMPLE CALCULATOR
+PLEASE DON'T BE HARD
+--------------------*/
+var $keys = $('.calculator button');
+var $screen = $('.screen');
+var decimal = false;
+var operators = ['+', '-', 'x', '÷'];
+
+$keys.click(function() {
+  var keyVal = $(this).data('val');
+  output = $('.screen').html();
+
+  console.log(keyVal);
+
+  // clear
+  if (keyVal == 'clear') {
+    $screen.html('');
+    decimal = false;
+  }
+  // equal
+  else if (keyVal == '=') {
+    var equation = output;
+    var lastChar = equation[equation.length - 1];
+    equation = equation.replace(/x/g, '*').replace(/÷/g, '/');
+    if (operators.indexOf(lastChar) > -1 || lastChar == '.')
+      equation = equation.replace(/.$/, '');
+    if (equation) {
+      $screen.html(eval(equation));
+    }
+    decimal = false;
+  }
+  // operators
+  else if ($(this).parent().is('.operators')) {
+    var lastChar = output[output.length - 1];
+    if (output != '' && operators.indexOf(lastChar) == -1) {
+      $screen.html($screen.html() + keyVal);
+    } else if (output == '' && keyVal == '-') {
+      $screen.html($screen.html() + keyVal);
+    }
+    if (operators.indexOf(lastChar) > -1 && output.length > 1) {
+      $screen.html($screen.html().replace(/.$/, keyVal));
+    }
+    decimal = false;
+  }
+  // decimal
+  else if (keyVal == '.') {
+    if (!decimal) {
+      $screen.html($screen.html() + keyVal);
+      decimal = true;
+    }
+  }
+  // buttons
+  else {
+    $screen.html($screen.html() + keyVal);
+  }
+})
+
+$(window).keydown(function(e) {
+  console.log(e.which);
+  switch (e.which) {
+    case 96:
+      key = 0;
+      break;
+    case 97:
+      key = 1;
+      break;
+    case 98:
+      key = 2;
+      break;
+    case 99:
+      key = 3;
+      break;
+    case 100:
+      key = 4;
+      break;
+    case 101:
+      key = 5;
+      break;
+    case 102:
+      key = 6;
+      break;
+    case 103:
+      key = 7;
+      break;
+    case 104:
+      key = 8;
+      break;
+    case 105:
+      key = 9;
+      break;
+    case 111:
+      key = '÷';
+      break;
+    case 109:
+      key = '-';
+      break;
+    case 106:
+      key = 'x';
+      break;
+    case 107:
+      key = '+';
+      break;
+    case 13:
+      key = '=';
+      break;
+    case 110:
+      key = '.';
+      break;
+    case 27:
+      key = 'clear';
+      break;
+    default:
+      return false;
+  }
+
+  $('[data-val="' + key + '"]').addClass('active').click();
+
+}).keyup(function(){
+  $('.active').removeClass('active');
+});
+
+
+/*--------------------
+Codepen Preview Tile
+--------------------*/
+$('[data-val="clear"]').click().delay(100).queue(function(){
+  $('[data-val="1"]').click().delay(200).queue(function(){
+    $('[data-val="5"]').click().delay(200).queue(function(){
+      $('[data-val="x"]').click().delay(200).queue(function(){
+        $('[data-val="3"]').click();
+      });
+    });
+  });
+})</pre></div>
 <script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
